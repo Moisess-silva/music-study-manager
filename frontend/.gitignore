@@ -1,0 +1,20 @@
+# Node
+node_modules
+
+# React
+dist
+
+# Java
+target
+
+# IntelliJ
+.idea
+
+# VS Code
+.vscode
+
+# Environment
+.env
+
+# Logs
+*.log
