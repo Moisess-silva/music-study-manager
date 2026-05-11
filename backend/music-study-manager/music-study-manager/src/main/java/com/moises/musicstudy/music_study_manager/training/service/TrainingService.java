@@ -51,4 +51,9 @@ public class TrainingService {
                 session.getBpm()
         );
     }
+
+    public void delete(String id) {
+
+        repository.deleteById(id);
+    }
 }

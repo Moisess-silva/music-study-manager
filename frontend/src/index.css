@@ -1,4 +1,22 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
 @import "tailwindcss";
+
+html,
+body,
+#root {
+
+  min-height: 100%;
+}
+
+body {
+
+  background: #09090b;
+
+  color: white;
+
+  font-family: sans-serif;
+}
+
+* {
+
+  box-sizing: border-box;
+}

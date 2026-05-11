@@ -28,4 +28,16 @@ public class TrainingController {
     public ResponseEntity<List<TrainingResponseDTO>> findAll() {
         return ResponseEntity.ok(service.findAll());
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(
+            @PathVariable String id
+    ) {
+
+        service.delete(id);
+
+        return ResponseEntity
+                .noContent()
+                .build();
+    }
 }

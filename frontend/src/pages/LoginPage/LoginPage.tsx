@@ -1,8 +1,39 @@
-import { useState } from "react";
+import {
+  useState,
+} from "react";
 
-import { api } from "../../services/api";
+import {
+  useNavigate,
+} from "react-router-dom";
+
+import {
+  Card,
+} from "../../components/ui/Card";
+
+import {
+  Input,
+} from "../../components/ui/Input";
+
+import {
+  Button,
+} from "../../components/ui/Button";
+
+import {
+  login,
+} from "../../services/authService";
+
+import {
+  useToast,
+} from "../../hooks/useToast";
 
 export function LoginPage() {
+
+  const navigate =
+    useNavigate();
+
+  const {
+    showToast,
+  } = useToast();
 
   const [email, setEmail] =
     useState("");
@@ -10,56 +41,135 @@ export function LoginPage() {
   const [password, setPassword] =
     useState("");
 
-  async function handleLogin() {
+  const [loading, setLoading] =
+    useState(false);
+
+  async function handleLogin(
+    event: React.FormEvent
+  ) {
+
+    event.preventDefault();
 
     try {
 
-      const response = await api.post(
-        "/auth/login",
-        {
+      setLoading(true);
+
+      const response =
+        await login({
           email,
           password,
-        }
-      );
+        });
 
       localStorage.setItem(
         "token",
-        response.data.token
+        response.token
       );
 
-      alert("Login realizado!");
+      showToast(
+        "Login realizado!"
+      );
+
+      navigate("/dashboard");
 
     } catch {
 
-      alert("Erro no login");
+      showToast(
+        "Erro ao fazer login"
+      );
+
+    } finally {
+
+      setLoading(false);
     }
   }
 
   return (
 
-    <div>
+    <div
+      className="
+        min-h-screen
+        flex
+        items-center
+        justify-center
+        bg-zinc-950
+        p-6
+      "
+    >
 
-      <h1>Music Study Manager</h1>
+      <Card
+        className="
+          w-full
+          max-w-md
+        "
+      >
 
-      <input
-        type="email"
-        placeholder="Email"
-        onChange={(e) =>
-          setEmail(e.target.value)
-        }
-      />
+        <form
+          onSubmit={handleLogin}
+          className="
+            flex
+            flex-col
+            gap-4
+          "
+        >
 
-      <input
-        type="password"
-        placeholder="Senha"
-        onChange={(e) =>
-          setPassword(e.target.value)
-        }
-      />
+          <div>
 
-      <button onClick={handleLogin}>
-        Entrar
-      </button>
+            <h1
+              className="
+                text-3xl
+                font-bold
+              "
+            >
+
+              Music Study
+
+            </h1>
+
+            <p
+              className="
+                text-zinc-400
+                mt-2
+              "
+            >
+
+              Entre na sua conta.
+
+            </p>
+
+          </div>
+
+          <Input
+            label="E-mail"
+            placeholder="Digite seu e-mail"
+            value={email}
+            onChange={(e) =>
+              setEmail(e.target.value)
+            }
+          />
+
+          <Input
+            label="Senha"
+            type="password"
+            placeholder="Digite sua senha"
+            value={password}
+            onChange={(e) =>
+              setPassword(e.target.value)
+            }
+          />
+
+          <Button type="submit">
+
+            {
+              loading
+                ? "Entrando..."
+                : "Entrar"
+            }
+
+          </Button>
+
+        </form>
+
+      </Card>
 
     </div>
   );

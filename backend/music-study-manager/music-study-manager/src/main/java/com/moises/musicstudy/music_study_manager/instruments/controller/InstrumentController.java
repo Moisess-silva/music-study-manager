@@ -28,4 +28,15 @@ public class InstrumentController {
     public ResponseEntity<List<InstrumentResponseDTO>> findAll() {
         return ResponseEntity.ok(service.findAll());
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(
+            @PathVariable String id
+    ) {
+
+        service.delete(id);
+
+        return ResponseEntity.noContent()
+                .build();
+    }
 }

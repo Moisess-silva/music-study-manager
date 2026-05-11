@@ -1,9 +1,13 @@
 package com.moises.musicstudy.music_study_manager.dashboard.service;
 
-import com.moises.musicstudy.music_study_manager.dashboard.dto.DashboardResponseDTO;
+import com.moises.musicstudy.music_study_manager.dashboard.dto.DashboardStatsDTO;
+
 import com.moises.musicstudy.music_study_manager.training.entity.TrainingSession;
+
 import com.moises.musicstudy.music_study_manager.training.repository.TrainingRepository;
+
 import lombok.RequiredArgsConstructor;
+
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,22 +16,35 @@ import java.util.List;
 @RequiredArgsConstructor
 public class DashboardService {
 
-    private final TrainingRepository trainingRepository;
+    private final TrainingRepository repository;
 
-    public DashboardResponseDTO getDashboard() {
+    public DashboardStatsDTO getStats() {
 
-        List<TrainingSession> sessions =
-                trainingRepository.findAll();
+        List<TrainingSession> trainings =
+                repository.findAll();
 
-        int totalMinutes = sessions.stream()
-                .mapToInt(TrainingSession::getDuration)
-                .sum();
+        long totalTrainings =
+                trainings.size();
 
-        int totalSessions = sessions.size();
+        double totalMinutes =
+                trainings.stream()
+                        .mapToDouble(
+                                TrainingSession::getDuration
+                        )
+                        .sum();
 
-        return new DashboardResponseDTO(
+        double averageBpm =
+                trainings.stream()
+                        .mapToDouble(
+                                TrainingSession::getBpm
+                        )
+                        .average()
+                        .orElse(0);
+
+        return new DashboardStatsDTO(
+                totalTrainings,
                 totalMinutes,
-                totalSessions
+                averageBpm
         );
     }
 }
