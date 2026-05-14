@@ -11,7 +11,7 @@ interface LoginDTO {
 
 interface RegisterDTO {
 
-  name: string;
+  username: string;
 
   email: string;
 
